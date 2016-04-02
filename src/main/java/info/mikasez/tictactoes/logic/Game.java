@@ -5,19 +5,20 @@ package info.mikasez.tictactoes.logic;
  */
 public class Game {
 
-    private int playerCount ;
-    private boolean [] board;
-
+    private Boolean [] board;
+    private boolean playerOne;
     public Game(){
-        playerCount = 2;
-        board =  new boolean[9];
+        board =  new Boolean[9];
+        playerOne = true;
     }
 
-    public int getPlayerCount() {
-        return playerCount;
-    }
-
-    public boolean[] getBoard() {
+    /**
+     * Board has 3 states <br>
+     *     Null : not played <br>
+     *     True : Player one played here <br>
+     *     False : Player two played here <br>
+     * */
+    public Boolean[] getBoard() {
         return board;
     }
 
@@ -32,19 +33,30 @@ public class Game {
         if(x < 1 || y < 1){
             throw new IllegalArgumentException("X and Y should be at least 1");
         }
-        if(x >3 || y > 3){
+        if(x >3 || y > 3) {
             throw new IllegalArgumentException("X and Y should be at most 3");
         }
-        System.out.printf("Played at : [%d, %d]\n", x, y);
+
+        if(board[(x-1)+((y-1) * 3)] != null){
+            throw new IllegalArgumentException("This case has been already played");
+        }
+
+        System.out.printf("Player %d played at : [%d, %d]\n", getCurrentPlayer(), x, y);
         System.out.printf("Real board position : [%d]\n", (x-1)+((y-1) * 3));
-        board[(x-1)+((y-1) * 3)] = true;
+
+        board[(x-1)+((y-1) * 3)] = playerOne;
+        playerOne = !playerOne;
     }
 
     /**
      * returns the corresponding board position
      * @throws IndexOutOfBoundsException : direct access to the board.
      * */
-    public boolean getAt(int i) {
+    public Boolean getAt(int i) {
         return board[i];
+    }
+
+    public int  getCurrentPlayer() {
+        return playerOne ? 1 : 2;
     }
 }

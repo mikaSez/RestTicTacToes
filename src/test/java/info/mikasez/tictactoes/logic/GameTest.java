@@ -109,4 +109,72 @@ public class GameTest {
         tested.playAt(1,1);
     }
 
+    @Test
+    public void gameEndsAtFullBoard(){
+        for(int y=1; y <= 3; ++y){
+            for(int x = 1; x<=3; ++x){
+                Assert.assertFalse(tested.gameEnded());
+                tested.playAt(x,y);
+            }
+        }
+        Assert.assertTrue(tested.gameEnded());
+    }
+
+    @Test
+    public void oneRowRuleBad(){
+        tested.playAt(1,1);
+        tested.playAt(2,1);
+        tested.playAt(3,1);
+
+        Assert.assertFalse(tested.gameEnded());
+        Assert.assertFalse(tested.getVictory());
+    }
+
+    @Test
+    public void firstRowWin(){
+        tested.playAt(1,1);
+        tested.playAt(1,2);
+        tested.playAt(2,1);
+        tested.playAt(1,3);
+        tested.playAt(3,1);
+
+        Assert.assertTrue(tested.gameEnded());
+        Assert.assertTrue(tested.getVictory());
+
+        Assert.assertEquals(1, tested.getCurrentPlayer());
+    }
+
+    @Test
+    public void secondRowWin(){
+        tested.playAt(1,3);
+        tested.playAt(1,2);
+
+        tested.playAt(2,1);
+        tested.playAt(2,2);
+
+        tested.playAt(3,1);
+        tested.playAt(3,2);
+
+        Assert.assertTrue(tested.gameEnded());
+        Assert.assertTrue(tested.getVictory());
+
+        Assert.assertEquals(2, tested.getCurrentPlayer());
+    }
+
+    @Test
+    public void thirdRowWin(){
+        tested.playAt(1,3);
+        tested.playAt(1,2);
+
+        tested.playAt(2,3);
+        tested.playAt(1,1);
+
+        tested.playAt(3,3);
+
+        Assert.assertTrue(tested.gameEnded());
+        Assert.assertTrue(tested.getVictory());
+
+        Assert.assertEquals(1, tested.getCurrentPlayer());
+    }
+
 }
